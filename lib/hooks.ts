@@ -15,7 +15,7 @@ export function useUserData (): UserContextType {
         if (user) {
             const ref = doc(firestore, 'users', user.uid);
             unsubscribe = onSnapshot(ref, (doc) => {
-                setUsername(doc.data()?.username ?? 'username');
+                setUsername(doc.data()?.username ?? '');
             });
         } else {
             setUsername(null);

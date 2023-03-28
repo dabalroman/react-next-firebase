@@ -1,7 +1,8 @@
 import { FirebaseApp, getApp, initializeApp } from 'firebase/app';
 import { Auth, getAuth, GoogleAuthProvider } from '@firebase/auth';
 import {
-    collection,
+    collection, DocumentData,
+    DocumentSnapshot,
     Firestore,
     getDocs,
     getFirestore,
@@ -9,7 +10,7 @@ import {
     orderBy,
     Query,
     query,
-    QueryDocumentSnapshot,
+    QueryDocumentSnapshot, Timestamp,
     where
 } from '@firebase/firestore';
 import { FirebaseStorage, getStorage } from '@firebase/storage';
@@ -60,15 +61,21 @@ export async function getUserPosts (userDoc: QueryDocumentSnapshot): Promise<Pos
         limit(5)
     );
 
-    return (await getDocs(q)).docs.map((doc: QueryDocumentSnapshot): Post => {
-        const data = doc.data();
+    return (await getDocs(q)).docs.map(postToJSON);
+}
 
-        return {
-            ...data,
-            createdAt: data.createdAt.toMillis() || 0,
-            updatedAt: data.updatedAt.toMillis() || 0
-        } as Post;
-    });
+export function postToJSON (doc: DocumentSnapshot) {
+    const data = doc.data();
+
+    if (data === undefined) {
+        throw new Error('Empty document!');
+    }
+
+    return {
+        ...data,
+        createdAt: data.createdAt.toMillis() || 0,
+        updatedAt: data.updatedAt.toMillis() || 0
+    } as Post;
 }
 
 export interface AppUser {
@@ -77,14 +84,14 @@ export interface AppUser {
     photoURL: string
 }
 
-export interface Post {
+export interface Post extends DocumentData{
     title: string,
     slug: string,
     uid: string,
     username: string,
     published: boolean,
     content: string,
-    createdAt: number,
-    updatedAt: number
+    createdAt: number | Timestamp,
+    updatedAt: number | Timestamp,
     heartCount: number
 }

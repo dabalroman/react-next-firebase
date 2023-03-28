@@ -4,6 +4,7 @@ import { UserContext, UserContextType } from '@/lib/context';
 import { ChangeEvent, FormEvent, useCallback, useContext, useEffect, useState } from 'react';
 import { doc, getDoc, writeBatch } from '@firebase/firestore';
 import debounce from 'lodash.debounce';
+import Metatags from '@/components/Metatags';
 
 export default function EnterPage ({}) {
     const {
@@ -13,6 +14,7 @@ export default function EnterPage ({}) {
 
     return (
         <main>
+            <Metatags title='Login page'/>
             {
                 (user
                         ? (!username ? <UsernameForm/> : <SignOutButton/>)
@@ -100,7 +102,6 @@ function UsernameForm () {
                 const snapshot = await getDoc(ref);
                 setIsValid(!snapshot.exists());
                 setLoading(false);
-                console.log('Firestore read executed!', snapshot.exists());
             }
         }, 500),
         []

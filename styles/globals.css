@@ -187,6 +187,7 @@ button.btn-logo {
 
 .card footer {
     display: flex;
+    justify-content: space-between;
 }
 
 .card-img-center {
@@ -212,6 +213,7 @@ button.btn-logo {
     width: 50px;
     height: 50px;
     animation: spin 2s linear infinite;
+    margin: 0 auto;
 }
 
 @keyframes spin {

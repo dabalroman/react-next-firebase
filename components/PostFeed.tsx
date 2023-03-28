@@ -29,7 +29,7 @@ function PostItem ({
             </Link>
 
             <footer>
-                <span>{wordCount} words. It will take you <b>{minutesToRead} min</b> to read.</span>&nbsp;
+                <span>{wordCount} words. It will take you <b>{minutesToRead} min</b> to read through.</span>
                 <span>❤️ {post.heartCount} Hearts</span>
             </footer>
         </div>

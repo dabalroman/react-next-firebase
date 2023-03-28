@@ -4,6 +4,7 @@ import PostFeed from '@/components/PostFeed';
 import { AppUser, getUserPosts, getUserWithUsername, Post } from '@/lib/firebase';
 import { NextParsedUrlQuery } from 'next/dist/server/request-meta';
 import { QueryDocumentSnapshot } from '@firebase/firestore';
+import Metatags from '@/components/Metatags';
 
 export async function getServerSideProps ({ query }: { query: NextParsedUrlQuery }) {
     const { username } = query;
@@ -14,13 +15,14 @@ export async function getServerSideProps ({ query }: { query: NextParsedUrlQuery
 
     const userDoc: QueryDocumentSnapshot = await getUserWithUsername(username);
 
-    let user = null;
-    let posts = null;
-
-    if (userDoc) {
-        user = userDoc.data() as AppUser;
-        posts = await getUserPosts(userDoc);
+    if (!userDoc) {
+        return {
+            notFound: true
+        };
     }
+
+    const user = userDoc.data() as AppUser;
+    const posts = await getUserPosts(userDoc);
 
     return {
         props: {
@@ -36,6 +38,7 @@ export default function UserProfilePage ({
 }: { user: AppUser, posts: Post[] }) {
     return (
         <main>
+            <Metatags title={`@${user.username}`}/>
             <UserProfile user={user}/>
             <PostFeed posts={posts} admin={false}/>
         </main>

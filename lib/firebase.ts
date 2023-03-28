@@ -1,6 +1,17 @@
 import { FirebaseApp, getApp, initializeApp } from 'firebase/app';
 import { Auth, getAuth, GoogleAuthProvider } from '@firebase/auth';
-import { Firestore, getFirestore } from '@firebase/firestore';
+import {
+    collection,
+    Firestore,
+    getDocs,
+    getFirestore,
+    limit,
+    orderBy,
+    Query,
+    query,
+    QueryDocumentSnapshot,
+    where
+} from '@firebase/firestore';
 import { FirebaseStorage, getStorage } from '@firebase/storage';
 
 const firebaseConfig = {
@@ -29,3 +40,51 @@ export const googleAuthProvider: GoogleAuthProvider = new GoogleAuthProvider();
 export const firestore: Firestore = getFirestore(firebaseApp);
 // @ts-ignore
 export const storage: FirebaseStorage = getStorage(firebaseApp);
+
+/// Helper functions
+export async function getUserWithUsername (username: string): Promise<QueryDocumentSnapshot> {
+    const q: Query = query(
+        collection(firestore, 'users'),
+        where('username', '==', username),
+        limit(1)
+    );
+
+    return (await getDocs(q)).docs[0];
+}
+
+export async function getUserPosts (userDoc: QueryDocumentSnapshot): Promise<Post[]> {
+    const q: Query = query(
+        collection(firestore, userDoc.ref.path, 'posts'),
+        where('published', '==', true),
+        orderBy('createdAt', 'desc'),
+        limit(5)
+    );
+
+    return (await getDocs(q)).docs.map((doc: QueryDocumentSnapshot): Post => {
+        const data = doc.data();
+
+        return {
+            ...data,
+            createdAt: data.createdAt.toMillis() || 0,
+            updatedAt: data.updatedAt.toMillis() || 0
+        } as Post;
+    });
+}
+
+export interface AppUser {
+    displayName: string,
+    username: string,
+    photoURL: string
+}
+
+export interface Post {
+    title: string,
+    slug: string,
+    uid: string,
+    username: string,
+    published: boolean,
+    content: string,
+    createdAt: number,
+    updatedAt: number
+    heartCount: number
+}

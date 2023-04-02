@@ -42,7 +42,7 @@ export const firestore: Firestore = getFirestore(firebaseApp);
 // @ts-ignore
 export const storage: FirebaseStorage = getStorage(firebaseApp);
 
-/// Helper functions
+//// Helper functions
 export async function getUserWithUsername (username: string): Promise<QueryDocumentSnapshot> {
     const q: Query = query(
         collection(firestore, 'users'),

@@ -35,3 +35,7 @@ function PostItem ({
         </div>
     );
 }
+
+PostItem.defaultProps = {
+    admin: false
+}

@@ -3,7 +3,10 @@ import { UserContext, UserContextType } from '@/lib/context';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 
-export default function AuthCheck (props: { children: JSX.Element[], fallback: JSX.Element[] | undefined }) {
+export default function AuthCheck (props: {
+    children: JSX.Element[] | JSX.Element,
+    fallback: JSX.Element[] | undefined
+}) {
     const { username } = useContext<UserContextType>(UserContext);
 
     return (
@@ -21,6 +24,6 @@ AuthCheck.defaultProps = {
 };
 
 AuthCheck.propTypes = {
-    children: PropTypes.arrayOf(PropTypes.element).isRequired,
+    children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element]).isRequired,
     fallback: PropTypes.arrayOf(PropTypes.element)
 };

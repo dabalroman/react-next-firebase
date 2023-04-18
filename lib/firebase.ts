@@ -34,13 +34,12 @@ function createFirebaseApp (config: {}) {
 
 const firebaseApp: FirebaseApp = createFirebaseApp(firebaseConfig);
 
-// @ts-ignore
 export const auth: Auth = getAuth(firebaseApp);
 export const googleAuthProvider: GoogleAuthProvider = new GoogleAuthProvider();
-// @ts-ignore
 export const firestore: Firestore = getFirestore(firebaseApp);
-// @ts-ignore
 export const storage: FirebaseStorage = getStorage(firebaseApp);
+export const STATE_CHANGED= 'state_changed';
+
 
 //// Helper functions
 export async function getUserWithUsername (username: string): Promise<QueryDocumentSnapshot> {
@@ -73,8 +72,8 @@ export function postToJSON (doc: DocumentSnapshot) {
 
     return {
         ...data,
-        createdAt: data.createdAt.toMillis() || 0,
-        updatedAt: data.updatedAt.toMillis() || 0
+        createdAt: data?.createdAt.toMillis() || 0,
+        updatedAt: data?.updatedAt.toMillis() || 0
     } as Post;
 }
 

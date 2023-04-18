@@ -20,6 +20,10 @@
     height: 0;
 }
 
+.container aside button {
+    width: 100%;
+}
+
 .hidden {
     display: none;
 }

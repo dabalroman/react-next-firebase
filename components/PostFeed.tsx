@@ -19,12 +19,14 @@ function PostItem ({
         .split(/\s+/g).length;
     const minutesToRead = (wordCount / 100 + 1).toFixed(0);
 
+    const url = admin ? `/admin/${post.slug}` : `/${post.username}/${post.slug}`;
+
     return (
         <div className="card">
-            <Link href={`/${post.username}`}>
+            <Link href={url}>
                 <strong>By @{post.username}</strong>
             </Link>
-            <Link href={`/${post.username}/${post.slug}`}>
+            <Link href={url}>
                 <h2>{post.title}</h2>
             </Link>
 

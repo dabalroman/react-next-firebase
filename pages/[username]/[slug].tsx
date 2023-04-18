@@ -3,6 +3,10 @@ import { collectionGroup, doc, DocumentSnapshot, getDoc, getDocs, limit, query }
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 import PostContent from '@/components/PostContent';
 import Metatags from '@/components/Metatags';
+import AuthCheck from '@/components/AuthCheck';
+import HeartButton from '@/components/HeartButton';
+import React from 'react';
+import Link from 'next/link';
 
 export async function getStaticProps ({ params }: { params: { username: string, slug: string } }) {
     const {
@@ -74,12 +78,22 @@ export default function PostPage (props: { post: Post, path: string }) {
                 <p>
                     <strong>{post.heartCount || 0} ❤️</strong>
                 </p>
+
+                <AuthCheck
+                    fallback={
+                        <Link href="/enter">
+                            <button>❤️ Sign Up</button>
+                        </Link>}
+                >
+                    <HeartButton postRef={postDoc}/>
+                </AuthCheck>
             </aside>
             <small style={{
                 textAlign: 'center',
                 display: 'block'
-            }}>This post is kept {realtimePost ? 'up-to-date' : 'cached'} by our
-                latest technology.</small>
+            }}>
+                This post is kept {realtimePost ? 'up-to-date' : 'cached'} by our latest technology.
+            </small>
         </main>
     );
 }

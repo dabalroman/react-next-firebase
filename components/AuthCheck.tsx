@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 export default function AuthCheck (props: {
     children: JSX.Element[] | JSX.Element,
-    fallback: JSX.Element[] | undefined
+    fallback: JSX.Element[] | JSX.Element | undefined
 }) {
     const { username } = useContext<UserContextType>(UserContext);
 
@@ -25,5 +25,5 @@ AuthCheck.defaultProps = {
 
 AuthCheck.propTypes = {
     children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element]).isRequired,
-    fallback: PropTypes.arrayOf(PropTypes.element)
+    fallback: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element]),
 };

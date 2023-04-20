@@ -91,10 +91,6 @@ function UsernameForm () {
             .commit();
     };
 
-    useEffect(() => {
-        checkUsername(formValue);
-    }, [formValue]);
-
     const checkUsername = useCallback(
         debounce(async (username: string) => {
             if (username.length >= 3) {
@@ -107,6 +103,10 @@ function UsernameForm () {
         []
     );
 
+    useEffect(() => {
+        checkUsername(formValue);
+    }, [checkUsername, formValue]);
+
     return (
         !username && (
             <section>
@@ -118,7 +118,7 @@ function UsernameForm () {
                 </form>
 
                 <br/>
-                <p>Form value: '{formValue}'</p>
+                <p>Form value: {formValue}</p>
                 <p>Valid: {isValid.toString()}</p>
                 <p>Loading: {loading.toString()}</p>
             </section>
